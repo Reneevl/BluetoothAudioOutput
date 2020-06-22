@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.2.7  C:\Users\renee\Documents\Blok 16\BluetoothAudioOutput\calc\calc\main.asm Mon Jun 22 21:40:37 2020
+AVRASM ver. 2.2.7  C:\Users\renee\Documents\Blok 16\BluetoothAudioOutput\calc\calc\main.asm Mon Jun 22 22:10:33 2020
 
 
 EQU  SIGNATURE_000 0000001e
@@ -791,14 +791,22 @@ CSEG Oplosbare_som_2 000001fe
 CSEG Oplosbare_som_3 0000021c
 CSEG Onoplosbare_som_1 00000246
 CSEG Onoplosbare_som_2 0000026a
-CSEG Save_digit   000002a1
-CSEG Save_operator 000002b6
-CSEG later_digit  000002ad
-CSEG fist_digit   000002a7
-CSEG not_first_digit 000002bb
-CSEG second_operator 000002c2
-CSEG send_operator 000002c8
-CSEG send_plus    000002d4
-CSEG send_minus   000002d8
-CSEG send_multiply 000002dc
-CSEG send_devide  000002e0
+CSEG Save_digit   000002c0
+CSEG Save_operator 000002d5
+CSEG Enter        00000322
+CSEG Simuleer_oplosbare_som_1v2 0000029d
+CSEG Backspace    00000303
+CSEG later_digit  000002cc
+CSEG fist_digit   000002c6
+CSEG not_first_digit 000002da
+CSEG second_operator 000002e1
+CSEG send_operator 000002e7
+CSEG send_plus    000002f3
+CSEG send_minus   000002f7
+CSEG send_multiply 000002fb
+CSEG send_devide  000002ff
+CSEG scrollback   00000304
+CSEG op_found     00000312
+CSEG overwrite    0000030c
+CSEG Do_backspace 00000318
+CSEG nextline     00000326

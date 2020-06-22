@@ -799,10 +799,33 @@ LDI param0, OPERAS					; -
 CALL Save_operator
 LDI param0, DIGIT4					; 4
 CALL Save_digit
-LDI param0, 0x0A
-CALL UART_Transmit
-LDI param0, 0x0D
-CALL UART_Transmit
+Call Enter
+RET
+
+Simuleer_oplosbare_som_1v2:
+; 629-20 BACKSPACE 30-4 = 595
+LDI param0, DIGIT6					; 6
+CALL Save_digit
+LDI param0, DIGIT2					; 2
+CALL Save_digit
+LDI param0, DIGIT9					; 9
+CALL Save_digit
+LDI param0, OPERAS					; -
+CALL Save_operator
+LDI param0, DIGIT2					; 2
+CALL Save_digit
+LDI param0, DIGIT0					; 0
+CALL Save_digit
+CALL Backspace
+LDI param0, DIGIT3					; 3
+CALL Save_digit
+LDI param0, DIGIT0					; 0
+CALL Save_digit
+LDI param0, OPERAS					; -
+CALL Save_operator
+LDI param0, DIGIT4					; 4
+CALL Save_digit
+CALL Enter
 RET
 
 ;-------------------DO SOME CHECKING AND SAVE THE INPUT (DIGIT)-------------------
@@ -878,5 +901,51 @@ CALL UART_Transmit
 RET
 send_devide:
 LDI param0, 0x2A
+CALL UART_Transmit
+RET
+
+;-------------------DO BACKSPACE-------------------
+Backspace:
+PUSH temp0
+scrollback:
+LD opdigi, -X
+LDI temp0, 0x10
+CP opdigi, temp0				; check if previous was an operator too
+BRGE op_found
+CPI sumendH, 0x00
+BRNE overwrite
+CPI sumendL, 0xFF
+BREQ op_found					; if begin of the sum has been met, end this routine
+overwrite:
+LDI temp0, EMPTYB
+ST X, temp0
+CALL Do_backspace
+JMP scrollback
+op_found:
+CALL Do_backspace
+LD temp0, X+
+CLR opdigi
+POP temp0
+RET
+;-------------------ERASE DIGIT OFF SCREEN-------------------
+Do_backspace:
+LDI param0, 0x08		;backspace sign
+CALL UART_Transmit
+LDI param0, 0x20		; space sign
+CALL UART_Transmit
+LDI param0, 0x08		;backspace sign
+CALL UART_Transmit
+RET
+
+;-------------------FINISH THE SUM-------------------
+Enter:
+MOV temp0, opdigi					; copy last digit/operant
+CPI temp0, 0x10						; check if operant
+BRGE nextline						; opdigi is operand, don't save it
+ST X+, opdigi
+nextline:
+LDI param0, 0x0A
+CALL UART_Transmit
+LDI param0, 0x0D
 CALL UART_Transmit
 RET

@@ -77,16 +77,24 @@
   <Oplosbare_som_3><FILE>C:\Users\renee\Documents\Blok 16\BluetoothAudioOutput\calc\calc\main.asm</FILE><LINE>690</LINE></Oplosbare_som_3>
   <Onoplosbare_som_1><FILE>C:\Users\renee\Documents\Blok 16\BluetoothAudioOutput\calc\calc\main.asm</FILE><LINE>734</LINE></Onoplosbare_som_1>
   <Onoplosbare_som_2><FILE>C:\Users\renee\Documents\Blok 16\BluetoothAudioOutput\calc\calc\main.asm</FILE><LINE>763</LINE></Onoplosbare_som_2>
-  <Save_digit><FILE>C:\Users\renee\Documents\Blok 16\BluetoothAudioOutput\calc\calc\main.asm</FILE><LINE>809</LINE></Save_digit>
-  <Save_operator><FILE>C:\Users\renee\Documents\Blok 16\BluetoothAudioOutput\calc\calc\main.asm</FILE><LINE>833</LINE></Save_operator>
-  <later_digit><FILE>C:\Users\renee\Documents\Blok 16\BluetoothAudioOutput\calc\calc\main.asm</FILE><LINE>822</LINE></later_digit>
-  <fist_digit><FILE>C:\Users\renee\Documents\Blok 16\BluetoothAudioOutput\calc\calc\main.asm</FILE><LINE>816</LINE></fist_digit>
-  <not_first_digit><FILE>C:\Users\renee\Documents\Blok 16\BluetoothAudioOutput\calc\calc\main.asm</FILE><LINE>839</LINE></not_first_digit>
-  <second_operator><FILE>C:\Users\renee\Documents\Blok 16\BluetoothAudioOutput\calc\calc\main.asm</FILE><LINE>847</LINE></second_operator>
-  <send_operator><FILE>C:\Users\renee\Documents\Blok 16\BluetoothAudioOutput\calc\calc\main.asm</FILE><LINE>853</LINE></send_operator>
-  <send_plus><FILE>C:\Users\renee\Documents\Blok 16\BluetoothAudioOutput\calc\calc\main.asm</FILE><LINE>867</LINE></send_plus>
-  <send_minus><FILE>C:\Users\renee\Documents\Blok 16\BluetoothAudioOutput\calc\calc\main.asm</FILE><LINE>871</LINE></send_minus>
-  <send_multiply><FILE>C:\Users\renee\Documents\Blok 16\BluetoothAudioOutput\calc\calc\main.asm</FILE><LINE>875</LINE></send_multiply>
-  <send_devide><FILE>C:\Users\renee\Documents\Blok 16\BluetoothAudioOutput\calc\calc\main.asm</FILE><LINE>879</LINE></send_devide>
+  <Save_digit><FILE>C:\Users\renee\Documents\Blok 16\BluetoothAudioOutput\calc\calc\main.asm</FILE><LINE>832</LINE></Save_digit>
+  <Save_operator><FILE>C:\Users\renee\Documents\Blok 16\BluetoothAudioOutput\calc\calc\main.asm</FILE><LINE>856</LINE></Save_operator>
+  <Enter><FILE>C:\Users\renee\Documents\Blok 16\BluetoothAudioOutput\calc\calc\main.asm</FILE><LINE>941</LINE></Enter>
+  <Simuleer_oplosbare_som_1v2><FILE>C:\Users\renee\Documents\Blok 16\BluetoothAudioOutput\calc\calc\main.asm</FILE><LINE>805</LINE></Simuleer_oplosbare_som_1v2>
+  <Backspace><FILE>C:\Users\renee\Documents\Blok 16\BluetoothAudioOutput\calc\calc\main.asm</FILE><LINE>908</LINE></Backspace>
+  <later_digit><FILE>C:\Users\renee\Documents\Blok 16\BluetoothAudioOutput\calc\calc\main.asm</FILE><LINE>845</LINE></later_digit>
+  <fist_digit><FILE>C:\Users\renee\Documents\Blok 16\BluetoothAudioOutput\calc\calc\main.asm</FILE><LINE>839</LINE></fist_digit>
+  <not_first_digit><FILE>C:\Users\renee\Documents\Blok 16\BluetoothAudioOutput\calc\calc\main.asm</FILE><LINE>862</LINE></not_first_digit>
+  <second_operator><FILE>C:\Users\renee\Documents\Blok 16\BluetoothAudioOutput\calc\calc\main.asm</FILE><LINE>870</LINE></second_operator>
+  <send_operator><FILE>C:\Users\renee\Documents\Blok 16\BluetoothAudioOutput\calc\calc\main.asm</FILE><LINE>876</LINE></send_operator>
+  <send_plus><FILE>C:\Users\renee\Documents\Blok 16\BluetoothAudioOutput\calc\calc\main.asm</FILE><LINE>890</LINE></send_plus>
+  <send_minus><FILE>C:\Users\renee\Documents\Blok 16\BluetoothAudioOutput\calc\calc\main.asm</FILE><LINE>894</LINE></send_minus>
+  <send_multiply><FILE>C:\Users\renee\Documents\Blok 16\BluetoothAudioOutput\calc\calc\main.asm</FILE><LINE>898</LINE></send_multiply>
+  <send_devide><FILE>C:\Users\renee\Documents\Blok 16\BluetoothAudioOutput\calc\calc\main.asm</FILE><LINE>902</LINE></send_devide>
+  <scrollback><FILE>C:\Users\renee\Documents\Blok 16\BluetoothAudioOutput\calc\calc\main.asm</FILE><LINE>910</LINE></scrollback>
+  <op_found><FILE>C:\Users\renee\Documents\Blok 16\BluetoothAudioOutput\calc\calc\main.asm</FILE><LINE>924</LINE></op_found>
+  <overwrite><FILE>C:\Users\renee\Documents\Blok 16\BluetoothAudioOutput\calc\calc\main.asm</FILE><LINE>919</LINE></overwrite>
+  <Do_backspace><FILE>C:\Users\renee\Documents\Blok 16\BluetoothAudioOutput\calc\calc\main.asm</FILE><LINE>931</LINE></Do_backspace>
+  <nextline><FILE>C:\Users\renee\Documents\Blok 16\BluetoothAudioOutput\calc\calc\main.asm</FILE><LINE>946</LINE></nextline>
  </LABELS>
 </ASSEMBLER_INFO>

@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.2.7  C:\Users\renee\Documents\Blok 16\BluetoothAudioOutput\calc\calc\main.asm Mon Jun 22 21:40:37 2020
+AVRASM ver. 2.2.7  C:\Users\renee\Documents\Blok 16\BluetoothAudioOutput\calc\calc\main.asm Mon Jun 22 22:10:33 2020
 
 [builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.3.300\avrasm\inc\m328pdef.inc'
 [builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.3.300\avrasm\inc\m328pdef.inc'
@@ -1770,101 +1770,170 @@ AVRASM ver. 2.2.7  C:\Users\renee\Documents\Blok 16\BluetoothAudioOutput\calc\ca
                                  Simuleer_oplosbare_som_1:
                                  ; 629-20-4 = 605
 000282 e006                      LDI param0, DIGIT6					; 6
-000283 940e 02a1                 CALL Save_digit
+000283 940e 02c0                 CALL Save_digit
 000285 e002                      LDI param0, DIGIT2					; 2
-000286 940e 02a1                 CALL Save_digit
+000286 940e 02c0                 CALL Save_digit
 000288 e009                      LDI param0, DIGIT9					; 9
-000289 940e 02a1                 CALL Save_digit
+000289 940e 02c0                 CALL Save_digit
 00028b e200                      LDI param0, OPERAS					; -
-00028c 940e 02b6                 CALL Save_operator
+00028c 940e 02d5                 CALL Save_operator
 00028e e002                      LDI param0, DIGIT2					; 2
-00028f 940e 02a1                 CALL Save_digit
+00028f 940e 02c0                 CALL Save_digit
 000291 e000                      LDI param0, DIGIT0					; 0
-000292 940e 02a1                 CALL Save_digit
+000292 940e 02c0                 CALL Save_digit
 000294 e200                      LDI param0, OPERAS					; -
-000295 940e 02b6                 CALL Save_operator
+000295 940e 02d5                 CALL Save_operator
 000297 e004                      LDI param0, DIGIT4					; 4
-000298 940e 02a1                 CALL Save_digit
-00029a e00a                      LDI param0, 0x0A
-00029b 940e 01bb                 CALL UART_Transmit
-00029d e00d                      LDI param0, 0x0D
-00029e 940e 01bb                 CALL UART_Transmit
-0002a0 9508                      RET
+000298 940e 02c0                 CALL Save_digit
+00029a 940e 0322                 Call Enter
+00029c 9508                      RET
+                                 
+                                 Simuleer_oplosbare_som_1v2:
+                                 ; 629-20 BACKSPACE 30-4 = 595
+00029d e006                      LDI param0, DIGIT6					; 6
+00029e 940e 02c0                 CALL Save_digit
+0002a0 e002                      LDI param0, DIGIT2					; 2
+0002a1 940e 02c0                 CALL Save_digit
+0002a3 e009                      LDI param0, DIGIT9					; 9
+0002a4 940e 02c0                 CALL Save_digit
+0002a6 e200                      LDI param0, OPERAS					; -
+0002a7 940e 02d5                 CALL Save_operator
+0002a9 e002                      LDI param0, DIGIT2					; 2
+0002aa 940e 02c0                 CALL Save_digit
+0002ac e000                      LDI param0, DIGIT0					; 0
+0002ad 940e 02c0                 CALL Save_digit
+0002af 940e 0303                 CALL Backspace
+0002b1 e003                      LDI param0, DIGIT3					; 3
+0002b2 940e 02c0                 CALL Save_digit
+0002b4 e000                      LDI param0, DIGIT0					; 0
+0002b5 940e 02c0                 CALL Save_digit
+0002b7 e200                      LDI param0, OPERAS					; -
+0002b8 940e 02d5                 CALL Save_operator
+0002ba e004                      LDI param0, DIGIT4					; 4
+0002bb 940e 02c0                 CALL Save_digit
+0002bd 940e 0322                 CALL Enter
+0002bf 9508                      RET
                                  
                                  ;-------------------DO SOME CHECKING AND SAVE THE INPUT (DIGIT)-------------------
                                  Save_digit:
-0002a1 30b1                      CPI sumendH, 0x01
-0002a2 f451                      BRNE later_digit
-0002a3 30a0                      CPI sumendL, 0x00
-0002a4 f441                      BRNE later_digit			;check if this is the first digit that is stored
-0002a5 20cc                      TST opdigi					; there is nothing in memory yet, is the opdigi is 0
-0002a6 f431                      BRNE later_digit			
+0002c0 30b1                      CPI sumendH, 0x01
+0002c1 f451                      BRNE later_digit
+0002c2 30a0                      CPI sumendL, 0x00
+0002c3 f441                      BRNE later_digit			;check if this is the first digit that is stored
+0002c4 20cc                      TST opdigi					; there is nothing in memory yet, is the opdigi is 0
+0002c5 f431                      BRNE later_digit			
                                  fist_digit:
-0002a7 2ec0                      MOV opdigi, param0			; if this is the first digit, only store this in de opdigi
-0002a8 e300                      LDI param0, 0x30
-0002a9 0d0c                      ADD param0, opdigi
-0002aa 940e 01bb                 CALL UART_Transmit
-0002ac 9508                      RET
+0002c6 2ec0                      MOV opdigi, param0			; if this is the first digit, only store this in de opdigi
+0002c7 e300                      LDI param0, 0x30
+0002c8 0d0c                      ADD param0, opdigi
+0002c9 940e 01bb                 CALL UART_Transmit
+0002cb 9508                      RET
                                  later_digit:
-0002ad 934f                      PUSH temp0
-0002ae 92cd                      ST X+, opdigi				; if this is a later digit, the opditi can be stored in memory
-0002af 2ec0                      MOV opdigi, param0
-0002b0 e340                      LDI temp0, 0x30				; make ascii number
-0002b1 0f04                      ADD param0, temp0
-0002b2 940e 01bb                 CALL UART_Transmit
-0002b4 914f                      POP temp0
-0002b5 9508                      RET
+0002cc 934f                      PUSH temp0
+0002cd 92cd                      ST X+, opdigi				; if this is a later digit, the opditi can be stored in memory
+0002ce 2ec0                      MOV opdigi, param0
+0002cf e340                      LDI temp0, 0x30				; make ascii number
+0002d0 0f04                      ADD param0, temp0
+0002d1 940e 01bb                 CALL UART_Transmit
+0002d3 914f                      POP temp0
+0002d4 9508                      RET
                                  
                                  ;-------------------DO SOME CHECKING AND SAVE INPUT (OPERATOR)-------------------
                                  Save_operator:
-0002b6 30b1                      CPI sumendH, 0x01
-0002b7 f419                      BRNE not_first_digit
-0002b8 30a0                      CPI sumendL, 0x00
-0002b9 f409                      BRNE not_first_digit			;check if this is the first digit that is stored
-0002ba 9508                      RET
+0002d5 30b1                      CPI sumendH, 0x01
+0002d6 f419                      BRNE not_first_digit
+0002d7 30a0                      CPI sumendL, 0x00
+0002d8 f409                      BRNE not_first_digit			;check if this is the first digit that is stored
+0002d9 9508                      RET
                                  not_first_digit:
-0002bb e190                      LDI temp5, 0x10
-0002bc 16c9                      CP opdigi, temp5				; check if previous was an operator too
-0002bd f424                      BRGE second_operator
-0002be 92cd                      ST X+, opdigi
-0002bf 2ec0                      MOV opdigi, param0
-0002c0 940c 02c8                 JMP send_operator
+0002da e190                      LDI temp5, 0x10
+0002db 16c9                      CP opdigi, temp5				; check if previous was an operator too
+0002dc f424                      BRGE second_operator
+0002dd 92cd                      ST X+, opdigi
+0002de 2ec0                      MOV opdigi, param0
+0002df 940c 02e7                 JMP send_operator
                                  
                                  second_operator:
-0002c2 2ec0                      MOV opdigi, param0
-0002c3 e008                      LDI param0, 0x08				; Backspace
-0002c4 940e 01bb                 CALL UART_Transmit
-0002c6 940c 02c8                 JMP send_operator
+0002e1 2ec0                      MOV opdigi, param0
+0002e2 e008                      LDI param0, 0x08				; Backspace
+0002e3 940e 01bb                 CALL UART_Transmit
+0002e5 940c 02e7                 JMP send_operator
                                  
                                  send_operator:
-0002c8 e190                      LDI temp5, 0x10
-0002c9 16c9                      CP opdigi, temp5				; check if +
-0002ca f049                      BREQ send_plus
-0002cb e290                      LDI temp5, 0x20
-0002cc 16c9                      CP opdigi, temp5				; check if -
-0002cd f051                      BREQ send_minus
-0002ce e490                      LDI temp5, 0x40
-0002cf 16c9                      CP opdigi, temp5				; check if *
-0002d0 f059                      BREQ send_multiply
-0002d1 e890                      LDI temp5, 0x80
-0002d2 16c9                      CP opdigi, temp5				; check if /
-0002d3 f061                      BREQ send_devide
+0002e7 e190                      LDI temp5, 0x10
+0002e8 16c9                      CP opdigi, temp5				; check if +
+0002e9 f049                      BREQ send_plus
+0002ea e290                      LDI temp5, 0x20
+0002eb 16c9                      CP opdigi, temp5				; check if -
+0002ec f051                      BREQ send_minus
+0002ed e490                      LDI temp5, 0x40
+0002ee 16c9                      CP opdigi, temp5				; check if *
+0002ef f059                      BREQ send_multiply
+0002f0 e890                      LDI temp5, 0x80
+0002f1 16c9                      CP opdigi, temp5				; check if /
+0002f2 f061                      BREQ send_devide
                                  
                                  send_plus:
-0002d4 e20b                      LDI param0, 0x2B
-0002d5 940e 01bb                 CALL UART_Transmit
-0002d7 9508                      RET
+0002f3 e20b                      LDI param0, 0x2B
+0002f4 940e 01bb                 CALL UART_Transmit
+0002f6 9508                      RET
                                  send_minus:
-0002d8 e20d                      LDI param0, 0x2D
-0002d9 940e 01bb                 CALL UART_Transmit
-0002db 9508                      RET
+0002f7 e20d                      LDI param0, 0x2D
+0002f8 940e 01bb                 CALL UART_Transmit
+0002fa 9508                      RET
                                  send_multiply:
-0002dc e20f                      LDI param0, 0x2F
-0002dd 940e 01bb                 CALL UART_Transmit
-0002df 9508                      RET
+0002fb e20f                      LDI param0, 0x2F
+0002fc 940e 01bb                 CALL UART_Transmit
+0002fe 9508                      RET
                                  send_devide:
-0002e0 e20a                      LDI param0, 0x2A
-0002e1 940e 01bb                 CALL UART_Transmit
+0002ff e20a                      LDI param0, 0x2A
+000300 940e 01bb                 CALL UART_Transmit
+000302 9508                      RET
+                                 
+                                 ;-------------------DO BACKSPACE-------------------
+                                 Backspace:
+000303 934f                      PUSH temp0
+                                 scrollback:
+000304 90ce                      LD opdigi, -X
+000305 e140                      LDI temp0, 0x10
+000306 16c4                      CP opdigi, temp0				; check if previous was an operator too
+000307 f454                      BRGE op_found
+000308 30b0                      CPI sumendH, 0x00
+000309 f411                      BRNE overwrite
+00030a 3faf                      CPI sumendL, 0xFF
+00030b f031                      BREQ op_found					; if begin of the sum has been met, end this routine
+                                 overwrite:
+00030c e04f                      LDI temp0, EMPTYB
+00030d 934c                      ST X, temp0
+00030e 940e 0318                 CALL Do_backspace
+000310 940c 0304                 JMP scrollback
+                                 op_found:
+000312 940e 0318                 CALL Do_backspace
+000314 914d                      LD temp0, X+
+000315 24cc                      CLR opdigi
+000316 914f                      POP temp0
+000317 9508                      RET
+                                 ;-------------------ERASE DIGIT OFF SCREEN-------------------
+                                 Do_backspace:
+000318 e008                      LDI param0, 0x08		;backspace sign
+000319 940e 01bb                 CALL UART_Transmit
+00031b e200                      LDI param0, 0x20		; space sign
+00031c 940e 01bb                 CALL UART_Transmit
+00031e e008                      LDI param0, 0x08		;backspace sign
+00031f 940e 01bb                 CALL UART_Transmit
+000321 9508                      RET
+                                 
+                                 ;-------------------FINISH THE SUM-------------------
+                                 Enter:
+000322 2d4c                      MOV temp0, opdigi					; copy last digit/operant
+000323 3140                      CPI temp0, 0x10						; check if operant
+000324 f40c                      BRGE nextline						; opdigi is operand, don't save it
+000325 92cd                      ST X+, opdigi
+                                 nextline:
+000326 e00a                      LDI param0, 0x0A
+000327 940e 01bb                 CALL UART_Transmit
+000329 e00d                      LDI param0, 0x0D
+00032a 940e 01bb                 CALL UART_Transmit
 
 
 RESOURCE USE INFORMATION
@@ -1882,39 +1951,39 @@ counted separately from r26..r31 here.
 .dseg memory usage only counts static data declared with .byte
 
 "ATmega328P" register use summary:
-x  :   2 y  :  11 z  :   1 r0 :   5 r1 :   5 r2 :   2 r3 :   2 r4 :   1 
-r5 :   1 r6 :   0 r7 :   0 r8 :   1 r9 :   1 r10:  42 r11:  17 r12:  21 
-r13:   5 r14:   3 r15:   3 r16:  52 r17:  18 r18:  16 r19:  16 r20: 183 
-r21:  41 r22:  48 r23:  15 r24:  18 r25:  14 r26:  10 r27:  10 r28:  16 
+x  :   6 y  :  11 z  :   1 r0 :   5 r1 :   5 r2 :   2 r3 :   2 r4 :   1 
+r5 :   1 r6 :   0 r7 :   0 r8 :   1 r9 :   1 r10:  42 r11:  17 r12:  26 
+r13:   5 r14:   3 r15:   3 r16:  65 r17:  18 r18:  16 r19:  16 r20: 192 
+r21:  41 r22:  48 r23:  15 r24:  18 r25:  14 r26:  11 r27:  11 r28:  16 
 r29:  15 r30:   5 r31:   5 
 Registers used: 33 out of 35 (94.3%)
 
 "ATmega328P" instruction use summary:
 .lds  :   0 .sts  :   0 adc   :   6 add   :   7 adiw  :   0 and   :   0 
 andi  :   0 asr   :   0 bclr  :   0 bld   :   0 brbc  :   0 brbs  :   0 
-brcc  :   1 brcs  :   0 break :   0 breq  :  12 brge  :   2 brhc  :   0 
+brcc  :   1 brcs  :   0 break :   0 breq  :  13 brge  :   4 brhc  :   0 
 brhs  :   0 brid  :   0 brie  :   0 brlo  :   1 brlt  :   0 brmi  :   0 
-brne  :  15 brpl  :   0 brsh  :   2 brtc  :   0 brts  :   0 brvc  :   1 
-brvs  :   3 bset  :   0 bst   :   0 call  :  57 cbi   :   0 cbr   :  14 
-clc   :   1 clh   :   0 cli   :   0 cln   :   0 clr   :  43 cls   :   0 
-clt   :   0 clv   :   0 clz   :   0 com   :   0 cp    :  10 cpc   :   0 
-cpi   :  12 cpse  :   0 dec   :   4 eor   :   0 fmul  :   0 fmuls :   0 
-fmulsu:   0 icall :   0 ijmp  :   0 in    :   0 inc   :   5 jmp   :  13 
-ld    :   9 ldd   :   0 ldi   : 127 lds   :   1 lpm   :   0 lsl   :   0 
-lsr   :   0 mov   :  37 movw  :  20 mul   :   4 muls  :   0 mulsu :   0 
-neg   :   0 nop   :   2 or    :   0 ori   :   0 out   :   2 pop   :  24 
-push  :  36 rcall :   0 ret   :  31 reti  :   0 rjmp  :  13 rol   :   4 
+brne  :  16 brpl  :   0 brsh  :   2 brtc  :   0 brts  :   0 brvc  :   1 
+brvs  :   3 bset  :   0 bst   :   0 call  :  75 cbi   :   0 cbr   :  14 
+clc   :   1 clh   :   0 cli   :   0 cln   :   0 clr   :  44 cls   :   0 
+clt   :   0 clv   :   0 clz   :   0 com   :   0 cp    :  11 cpc   :   0 
+cpi   :  15 cpse  :   0 dec   :   4 eor   :   0 fmul  :   0 fmuls :   0 
+fmulsu:   0 icall :   0 ijmp  :   0 in    :   0 inc   :   5 jmp   :  14 
+ld    :  11 ldd   :   0 ldi   : 142 lds   :   1 lpm   :   0 lsl   :   0 
+lsr   :   0 mov   :  38 movw  :  20 mul   :   4 muls  :   0 mulsu :   0 
+neg   :   0 nop   :   2 or    :   0 ori   :   0 out   :   2 pop   :  25 
+push  :  37 rcall :   0 ret   :  35 reti  :   0 rjmp  :  13 rol   :   4 
 ror   :   0 sbc   :   2 sbci  :   0 sbi   :   0 sbic  :   0 sbis  :   0 
 sbiw  :   0 sbr   :   6 sbrc  :  16 sbrs  :   4 sec   :   1 seh   :   0 
 sei   :   0 sen   :   0 ser   :   0 ses   :   0 set   :   0 sev   :   0 
-sez   :   0 sleep :   0 spm   :   0 st    :   5 std   :   0 sts   :  52 
+sez   :   0 sleep :   0 spm   :   0 st    :   7 std   :   0 sts   :  52 
 sub   :   3 subi  :   2 swap  :   0 tst   :   7 wdr   :   0 
 Instructions used: 42 out of 113 (37.2%)
 
 "ATmega328P" memory use summary [bytes]:
 Segment   Begin    End      Code   Data   Used    Size   Use%
 ---------------------------------------------------------------
-[.cseg] 0x000000 0x0005c8   1480      0   1480   32768   4.5%
+[.cseg] 0x000000 0x00065a   1626      0   1626   32768   5.0%
 [.dseg] 0x000100 0x000100      0      0      0    2048   0.0%
 [.eseg] 0x000000 0x000000      0      0      0    1024   0.0%
 
