@@ -76,10 +76,17 @@ STS UCSR0B,temp0
 LDI temp0, (3<<UCSZ00)
 STS UCSR0C, temp0
 
-CALL Oplosbare_som_3
+CALL Simuleer_oplosbare_som_1
 CALL Solve
+LDI param0, 0x0A
+CALL UART_Transmit
+LDI param0, 0x0D
+CALL UART_Transmit
+
 loop:
 JMP loop
+
+
 ;-------------------SOLVING THE SUM IN MEMORY-------------------
 Solve:
 CBR sumcntL, 0xFF					; begining of the sum
@@ -126,7 +133,7 @@ LDI sumcntH, 0x01
 Printloop:
 CALL sumcnt_end_check
 SBRC ret0, 0						; if very end of the sum, do next
-JMP loop
+RET
 LD temp0, Y+				
 TST temp0							; If zero, check if it is the first zero
 BREQ zero_print
@@ -275,6 +282,7 @@ SBRC temp4,5						; check subtract bit
 CALL Sub_16bit
 SBRC temp4,4						; check add bit
 CALL Add_16bit
+BRVS Overflow_path1					; quit because overflow
 
 Store_in_memory:					; our answer will be stored in temp1 and temp0 from this point
 ; We will need Y again to scroll through the sum, but knowing the end of this sum will be usefull later
@@ -396,6 +404,8 @@ CALL UART_Transmit
 LDI param0, 0x52					;R
 CALL UART_Transmit
 CALL Reset
+overflow_loop:
+JMP overflow_loop
 
 RET
 
@@ -719,4 +729,154 @@ LDI temp0, DIGIT8
 STS 0x010C, temp0					; 8
 LDI sumendH, 0x01
 LDI sumendL, 0x0D
+RET
+
+Onoplosbare_som_1:
+; 99999-99000 = 999
+; The system can't work with numbers this high
+LDI temp0, DIGIT9
+STS 0x0100, temp0					; 9
+LDI temp0, DIGIT9
+STS 0x0101, temp0					; 9
+LDI temp0, DIGIT9
+STS 0x0102, temp0					; 9
+LDI temp0, DIGIT9
+STS 0x0103, temp0					; 9
+LDI temp0, DIGIT9
+STS 0x0104, temp0					; 9
+LDI temp0, OPERAS
+STS 0x0105, temp0					; -
+LDI temp0, DIGIT9
+STS 0x0106, temp0					; 9
+LDI temp0, DIGIT9
+STS 0x0107, temp0					; 9
+LDI temp0, DIGIT0
+STS 0x0108, temp0					; 0
+LDI temp0, DIGIT0
+STS 0x0109, temp0					; 0
+LDI temp0, DIGIT0
+STS 0x010A, temp0					; 0
+LDI sumendH, 0x01
+LDI sumendL, 0x0B
+RET
+
+Onoplosbare_som_2:
+; 10000*9= 900000
+; The solution is too high
+LDI temp0, DIGIT1
+STS 0x0100, temp0					; 1
+LDI temp0, DIGIT0
+STS 0x0101, temp0					; 0
+LDI temp0, DIGIT0
+STS 0x0102, temp0					; 0
+LDI temp0, DIGIT0
+STS 0x0103, temp0					; 0
+LDI temp0, DIGIT0
+STS 0x0104, temp0					; 0
+LDI temp0, OPERAM
+STS 0x0105, temp0					; *
+LDI temp0, DIGIT9
+STS 0x0106, temp0					; 9
+LDI sumendH, 0x01
+LDI sumendL, 0x07
+RET
+
+Simuleer_oplosbare_som_1:
+; 629-20-4 = 605
+LDI param0, DIGIT6					; 6
+CALL Save_digit
+LDI param0, DIGIT2					; 2
+CALL Save_digit
+LDI param0, DIGIT9					; 9
+CALL Save_digit
+LDI param0, OPERAS					; -
+CALL Save_operator
+LDI param0, DIGIT2					; 2
+CALL Save_digit
+LDI param0, DIGIT0					; 0
+CALL Save_digit
+LDI param0, OPERAS					; -
+CALL Save_operator
+LDI param0, DIGIT4					; 4
+CALL Save_digit
+LDI param0, 0x0A
+CALL UART_Transmit
+LDI param0, 0x0D
+CALL UART_Transmit
+RET
+
+;-------------------DO SOME CHECKING AND SAVE THE INPUT (DIGIT)-------------------
+Save_digit:
+CPI sumendH, 0x01
+BRNE later_digit
+CPI sumendL, 0x00
+BRNE later_digit			;check if this is the first digit that is stored
+TST opdigi					; there is nothing in memory yet, is the opdigi is 0
+BRNE later_digit			
+fist_digit:
+MOV opdigi, param0			; if this is the first digit, only store this in de opdigi
+LDI param0, 0x30
+ADD param0, opdigi
+CALL UART_Transmit
+RET
+later_digit:
+PUSH temp0
+ST X+, opdigi				; if this is a later digit, the opditi can be stored in memory
+MOV opdigi, param0
+LDI temp0, 0x30				; make ascii number
+ADD param0, temp0
+CALL UART_Transmit
+POP temp0
+RET
+
+;-------------------DO SOME CHECKING AND SAVE INPUT (OPERATOR)-------------------
+Save_operator:
+CPI sumendH, 0x01
+BRNE not_first_digit
+CPI sumendL, 0x00
+BRNE not_first_digit			;check if this is the first digit that is stored
+RET
+not_first_digit:
+LDI temp5, 0x10
+CP opdigi, temp5				; check if previous was an operator too
+BRGE second_operator
+ST X+, opdigi
+MOV opdigi, param0
+JMP send_operator
+
+second_operator:
+MOV opdigi, param0
+LDI param0, 0x08				; Backspace
+CALL UART_Transmit
+JMP send_operator
+
+send_operator:
+LDI temp5, 0x10
+CP opdigi, temp5				; check if +
+BREQ send_plus
+LDI temp5, 0x20
+CP opdigi, temp5				; check if -
+BREQ send_minus
+LDI temp5, 0x40
+CP opdigi, temp5				; check if *
+BREQ send_multiply
+LDI temp5, 0x80
+CP opdigi, temp5				; check if /
+BREQ send_devide
+
+send_plus:
+LDI param0, 0x2B
+CALL UART_Transmit
+RET
+send_minus:
+LDI param0, 0x2D
+CALL UART_Transmit
+RET
+send_multiply:
+LDI param0, 0x2F
+CALL UART_Transmit
+RET
+send_devide:
+LDI param0, 0x2A
+CALL UART_Transmit
 RET
